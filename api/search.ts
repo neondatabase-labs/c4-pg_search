@@ -10,6 +10,7 @@ const resultsPerPage = 20;
 
 const htmlEsc = (s: string) => s.replace(/[&<>'"]/g, c => `&${{ '&': 'amp', '<': 'lt', '>': 'gt', "'": 'apos', '"': 'quot' }[c] as string};`);
 const queryEsc = (q: string) => encodeURIComponent(q).replace(/%20/g, '+');
+
 const html = (q: string, results: string, t: number) => `<!DOCTYPE html>
   <html lang="en">
     <head>
@@ -34,7 +35,7 @@ const html = (q: string, results: string, t: number) => `<!DOCTYPE html>
         This is <a href="https://en.wikipedia.org/wiki/Okapi_BM25">BM25</a> full-text search over the 364,868,892 pages
         of the <a href="https://huggingface.co/datasets/allenai/c4">Colossal Common Crawl Corpus</a> (clean, English-only),
         powered by <a href="https://neon.tech/docs/extensions/pg_search">pg_search</a>, <a href="https://neon.tech">Neon</a>
-        and <a href="https://vercel.com/docs/functions">Vercel</a>. Source on <a href="https://github.com/neondatabase-labs/c4-pg_search">GitHub</a>.
+        and <a href="https://vercel.com/docs/functions">Vercel</a>. Source <a href="https://github.com/neondatabase-labs/c4-pg_search/blob/main/api/search.ts">on GitHub</a>.
       </p>
       <p class="timing">${t.toFixed(2)} ms</p>
     </body>

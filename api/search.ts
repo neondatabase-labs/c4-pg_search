@@ -65,8 +65,8 @@ export default async (req: Request) => {
           return `
             <li class="result">
               <div class="url">
-                <a href="${url}"><span class="domain">${host}</span><span class="path">${path}</span></a> 
-                — <a href="https://web.archive.org/web/*/${url}">wayback</a> 
+                <a href="${url}"><span class="domain">${host}</span><span class="path">${path}</span></a>
+                — <a href="https://web.archive.org/web/*/${url}">wayback</a>
                 / <label><input type="checkbox"><span class="link">text</span><div class="preview"><p>${esc(body).replace(/\n/g, '</p><p>')}</p></div></label>
               </div>
               <div class="snippet">&hellip;&nbsp;${snippet}&nbsp;&hellip;</div>

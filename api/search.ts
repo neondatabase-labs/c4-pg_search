@@ -15,9 +15,7 @@ const html = (q: string, results: string) => `<!DOCTYPE html>
       <link rel="stylesheet" href="/style.css" />
     </head>
     <body>
-      
       <h1>
-        
         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 83 83" fill="none">
           <path fill="#000" d="M56.63 15.86A30 30 0 1 1 14.27 29.5l2.62 1.5a27 27 0 1 0 3-5.19l-2.62-1.5a30 30 0 0 1 39.36-8.46Z"/>
           <path stroke="#000" stroke-linecap="round" stroke-width="3" d="m17.07 17.68 1.66 7.83 7.83-1.66M42 42V19"/>

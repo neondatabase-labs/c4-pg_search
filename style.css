@@ -10,6 +10,11 @@ a {
 h1 {
   font-size: 2rem;
 }
+h1 svg {
+  width: 48px;
+  height: 48px;
+  margin-bottom: -12px;
+}
 h1, form, .controls, .description {
   text-align: center;
 }

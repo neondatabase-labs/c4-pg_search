@@ -12,19 +12,19 @@ const html = (q: string, results: string) => `<!DOCTYPE html>
   <html>
     <head>
       <title>${esc(title)}</title>
-      <link rel="stylesheet" href="/style.css" />
+      <link rel="stylesheet" href="/style.css">
     </head>
     <body>
       <h1>
         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 83 83" fill="none">
-          <path fill="#000" d="M56.63 15.86A30 30 0 1 1 14.27 29.5l2.62 1.5a27 27 0 1 0 3-5.19l-2.62-1.5a30 30 0 0 1 39.36-8.46Z"/>
-          <path stroke="#000" stroke-linecap="round" stroke-width="3" d="m17.07 17.68 1.66 7.83 7.83-1.66M42 42V19"/>
-          <path stroke="#000" stroke-linecap="round" stroke-width="5" d="M54.72 36 42 41.93"/>
+          <path fill="#000" d="M56.63 15.86A30 30 0 1 1 14.27 29.5l2.62 1.5a27 27 0 1 0 3-5.19l-2.62-1.5a30 30 0 0 1 39.36-8.46Z" />
+          <path stroke="#000" stroke-linecap="round" stroke-width="3" d="m17.07 17.68 1.66 7.83 7.83-1.66M42 42V19" />
+          <path stroke="#000" stroke-linecap="round" stroke-width="5" d="M54.72 36 42 41.93" />
         </svg>
         ${esc(title)}
       </h1>
       <form method="GET">
-        <p><input type="text" size="80" name="q" value="${esc(q.replace(/[+]/g, ' '))}" /> <input type="submit" value="Search" /></p>
+        <p><input type="text" size="80" name="q" value="${esc(q)}"> <input type="submit" value="Search"></p>
       </form>
       ${results}
       <p class="description">
@@ -39,7 +39,7 @@ const html = (q: string, results: string) => `<!DOCTYPE html>
 
 export default async (req: Request) => {
   const { searchParams } = new URL(req.url);
-  const q = searchParams.get('q')?.trim() ?? '';
+  const q = searchParams.get('q')?.replace(/[+]/g, ' ').trim() ?? '';
   let offset = Math.max(0, parseInt(searchParams.get('offset') ?? '0', 10));
   let results = '';
 
@@ -68,8 +68,8 @@ export default async (req: Request) => {
         ).join('\n')}
       </ol>
       <div class="controls">
-        ${offset > 0 ? `<a href="?q=${esc(q)}&offset=${offset - resultsPerPage}">&laquo; Prev ${resultsPerPage}</a> &nbsp; ` : ''}
-        ${rows.length > resultsPerPage ? `<a href="?q=${esc(q)}&offset=${offset + resultsPerPage}">Next ${resultsPerPage} &raquo;</a>` : ''}
+        ${offset > 0 ? `<a href="?q=${encodeURIComponent(q).replace(/%20/g, '+')}&offset=${offset - resultsPerPage}">&laquo; Prev ${resultsPerPage}</a> &nbsp; ` : ''}
+        ${rows.length > resultsPerPage ? `<a href="?q=${encodeURIComponent(q).replace(/%20/g, '+')}&offset=${offset + resultsPerPage}">Next ${resultsPerPage} &raquo;</a>` : ''}
       </div>`;
   }
 

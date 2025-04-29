@@ -8,11 +8,12 @@ export const config = {  // Vercel Edge Function config
 const title = 'Full-text time machine';
 const resultsPerPage = 20;
 
-const esc = (s: string) => s.replace(/[&<>'"]/g, c => `&${{ '&': 'amp', '<': 'lt', '>': 'gt', "'": 'apos', '"': 'quot' }[c] as string};`);
+const htmlEsc = (s: string) => s.replace(/[&<>'"]/g, c => `&${{ '&': 'amp', '<': 'lt', '>': 'gt', "'": 'apos', '"': 'quot' }[c] as string};`);
+const queryEsc = (q: string) => encodeURIComponent(q).replace(/%20/g, '+');
 const html = (q: string, results: string, t: number) => `<!DOCTYPE html>
   <html lang="en">
     <head>
-      <title>${esc(title)}</title>
+      <title>${htmlEsc(title)}</title>
       <link rel="stylesheet" href="/style.css">
     </head>
     <body>
@@ -22,10 +23,10 @@ const html = (q: string, results: string, t: number) => `<!DOCTYPE html>
           <path stroke="#000" stroke-linecap="round" stroke-width="3" d="m17.07 17.68 1.66 7.83 7.83-1.66M42 42V19" />
           <path stroke="#000" stroke-linecap="round" stroke-width="5" d="M54.72 36 42 41.93" />
         </svg>
-        ${esc(title)}
+        ${htmlEsc(title)}
       </h1>
       <form method="GET">
-        <p><input type="text" size="50" name="q" value="${esc(q)}"> <input type="submit" value="Search"></p>
+        <p><input type="text" size="50" name="q" value="${htmlEsc(q)}"> <input type="submit" value="Search"></p>
       </form>
       ${results}
       <p class="description">
@@ -43,9 +44,9 @@ export default async (req: Request) => {
   const t0 = performance.now();
   const { searchParams } = new URL(req.url);
   const q = searchParams.get('q')?.replace(/[+]/g, ' ').trim() ?? '';
-  let offset = Math.max(0, parseInt(searchParams.get('offset') ?? '0', 10));
-  let results = '';
+  const offset = Math.max(0, parseInt(searchParams.get('offset') ?? '0', 10));
 
+  let results = '';
   if (q !== '') {
     const sql = neon(process.env.DATABASE_URL!);
     const searchTerms = `"${q.replace(/"/g, ' ').replace(/\s+/g, ' ')}"~3`;
@@ -67,15 +68,15 @@ export default async (req: Request) => {
               <div class="url">
                 <a href="${url}"><span class="domain">${host}</span><span class="path">${path}</span></a>
                 — <a href="https://web.archive.org/web/*/${url}">wayback</a>
-                / <label><input type="checkbox"><span class="link">text</span><div class="preview"><p>${esc(body).replace(/\n/g, '</p><p>')}</p></div></label>
+                / <label><input type="checkbox"><span class="link">text</span><div class="preview"><p>${htmlEsc(body).replace(/\n/g, '</p><p>')}</p></div></label>
               </div>
               <div class="snippet">&hellip;&nbsp;${snippet}&nbsp;&hellip;</div>
             </li>`;
         }).join('\n')}
       </ol>
       <div class="controls">
-        ${offset > 0 ? `<a href="?q=${encodeURIComponent(q).replace(/%20/g, '+')}&offset=${offset - resultsPerPage}">&laquo; Prev ${resultsPerPage}</a> &nbsp; ` : ''}
-        ${rows.length > resultsPerPage ? `<a href="?q=${encodeURIComponent(q).replace(/%20/g, '+')}&offset=${offset + resultsPerPage}">Next ${resultsPerPage} &raquo;</a>` : ''}
+        ${offset > 0 ? `<a href="?q=${queryEsc(q)}&offset=${offset - resultsPerPage}">&laquo; Prev ${resultsPerPage}</a> &nbsp; ` : ''}
+        ${rows.length > resultsPerPage ? `<a href="?q=${queryEsc(q)}&offset=${offset + resultsPerPage}">Next ${resultsPerPage} &raquo;</a>` : ''}
       </div>`;
   }
 

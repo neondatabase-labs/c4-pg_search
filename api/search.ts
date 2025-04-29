@@ -21,7 +21,7 @@ const html = (q: string, results: string) => `<!DOCTYPE html>
       </form>
       ${results}
       <p class="description">
-        Search the web like it’s 2019.
+        Search the web like it’s 2019 and Google never existed.
         <a href="https://en.wikipedia.org/wiki/Okapi_BM25">BM25</a> full-text search over the 364,868,892 pages
         of the <a href="https://huggingface.co/datasets/allenai/c4">Colossal Common Crawl Corpus</a> (clean, English-only).
         Powered by <a href="https://neon.tech/docs/extensions/pg_search">pg_search</a>, <a href="https://neon.tech">Neon</a>

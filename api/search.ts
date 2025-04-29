@@ -25,7 +25,7 @@ const html = (q: string, results: string) => `<!DOCTYPE html>
         <a href="https://en.wikipedia.org/wiki/Okapi_BM25">BM25</a> full-text search over the 364,868,892 pages
         of the <a href="https://huggingface.co/datasets/allenai/c4">Colossal Common Crawl Corpus</a> (clean, English-only).
         Powered by <a href="https://neon.tech/docs/extensions/pg_search">pg_search</a>, <a href="https://neon.tech">Neon</a>
-        and <a href="https://vercel.com/docs/functions">Vercel</a>.
+        and <a href="https://vercel.com/docs/functions">Vercel</a>. <a href="https://github.com/neondatabase-labs/c4-pg_search">Source code</a>.
       </p>
     </body>
   </html>`;
@@ -38,7 +38,7 @@ export default async (req: Request) => {
 
   if (q !== '') {
     const sql = neon(process.env.DATABASE_URL!);
-    const searchTerms = `"${q.replace(/"/g, ' ').replace(/\s+/g, ' ')}"~3`;
+    const searchTerms = `"${q.replace(/"/g, ' ').replace(/\s+/g, ' ')}"~2`;
 
     const rows = await sql`
       SELECT id, paradedb.score(id), paradedb.snippet(body), url, body

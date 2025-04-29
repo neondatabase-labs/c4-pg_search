@@ -49,7 +49,7 @@ export default async (req: Request) => {
   let results = '';
   if (q !== '') {
     const sql = neon(process.env.DATABASE_URL!);
-    const searchTerms = `"${q.replace(/"/g, ' ').replace(/\s+/g, ' ')}"~3`;
+    const searchTerms = `"${q.replace(/"/g, ' ').replace(/\s+/g, ' ')}"~2`;
 
     const rows = await sql`
       SELECT id, url, body, paradedb.score(id), paradedb.snippet(body)

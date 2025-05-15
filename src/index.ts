@@ -40,8 +40,8 @@ export default {
           ${rows.length > resultsPerPage ? `<a href="?q=${queryEsc(q)}&offset=${offset + resultsPerPage}">Next ${resultsPerPage} &raquo;</a>` : ''}
         </div>`;
 		}
-    await new Promise(resolve => setTimeout(resolve, 2000));
-		return new Response(html(q, results, performance.now() - t0), {
+    
+    return new Response(html(q, results, performance.now() - t0), {
 			headers: { 'Content-Type': 'text/html; charset=utf-8' }
 		});
 
@@ -66,9 +66,9 @@ const html = (q: string, results: string, t: number) => `<!DOCTYPE html>
           <style>
             .spinner { transform-origin: center }
             .spinner_h { transform: rotate(45deg) }
-            .spinner_h_anim { animation: spinner_ZpfF 9s linear infinite }
-            .spinner_m_anim { animation: spinner_ZpfF .75s linear infinite }
-            @keyframes spinner_ZpfF{ 100% { transform: rotate(-360deg) } }
+            .spinner_h_anim { animation: spinner_anim 9s linear infinite }
+            .spinner_m_anim { animation: spinner_anim .75s linear infinite }
+            @keyframes spinner_anim { 100% { transform: rotate(-360deg) } }
           </style>
           <path d="M12,1A11,11,0,1,0,23,12,11,11,0,0,0,12,1Zm0,20a9,9,0,1,1,9-9A9,9,0,0,1,12,21Z"/>
           <rect id="handh" class="spinner spinner_h" x="11" y="6" rx="1" width="2" height="7"/>

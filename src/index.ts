@@ -89,8 +89,8 @@ const html = (q: string, results: string, t: number) => `<!DOCTYPE html>
         Search the web like it’s 2019 — and <a href="https://web.stanford.edu/class/cs54n/handouts/24-GooglePageRankAlgorithm.pdf">PageRank</a> never existed.
         This is <a href="https://en.wikipedia.org/wiki/Okapi_BM25">BM25</a> full-text search over the 364,868,892 pages
         of the <a href="https://huggingface.co/datasets/allenai/c4">Colossal Common Crawl Corpus</a> (clean, English-only),
-        powered by <a href="https://neon.tech/docs/extensions/pg_search">pg_search</a>, <a href="https://neon.tech">Neon</a>
-        and <a href="https://vercel.com/docs/functions">Vercel</a>. Source <a href="https://github.com/neondatabase-labs/c4-pg_search/blob/main/api/search.ts">on GitHub</a>.
+        powered by <a href="https://neon.tech/docs/extensions/pg_search">pg_search</a> and <a href="https://neon.tech">Neon</a>.
+        Source <a href="https://github.com/neondatabase-labs/c4-pg_search/blob/main/api/search.ts">on GitHub</a>.
       </p>
       <p class="timing">${t.toFixed(2)} ms</p>
       <script>

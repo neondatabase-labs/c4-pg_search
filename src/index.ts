@@ -1,7 +1,7 @@
-import { neon } from '@neondatabase/serverless';
+import { Pool } from '@neondatabase/serverless';
 
 export default {
-	async fetch(req, env): Promise<Response> {
+	async fetch(req, env, ctx): Promise<Response> {
 		const t0 = performance.now();
 		const { searchParams } = new URL(req.url);
 		const q = searchParams.get('q')?.replace(/[+]/g, ' ').trim() ?? '';
@@ -9,15 +9,17 @@ export default {
 
 		let results = '';
 		if (q !== '') {
-			const sql = neon(env.DATABASE_URL!);
+			const pool = new Pool({ connectionString: env.DATABASE_URL });
 			const searchTerms = `"${q.replace(/"/g, ' ').replace(/\s+/g, ' ')}"~2`;
 
-			const rows = await sql`
+			const { rows } = await pool.query(`
         SELECT id, url, body, paradedb.score(id), paradedb.snippet(body)
         FROM pages
-        WHERE body @@@ ${searchTerms}
+        WHERE body @@@ $1
         ORDER BY paradedb.score(id) DESC, id ASC
-        OFFSET ${offset} LIMIT ${resultsPerPage + 1}`; // ordering by id is for stability
+        OFFSET $2 LIMIT $3`, 
+        [searchTerms, offset, resultsPerPage + 1] // we request one extra result to know whether to display the 'Next' button
+      ); 
 
 			results = `
         <ol start="${offset + 1}">
@@ -39,6 +41,8 @@ export default {
           ${offset > 0 ? `<a href="?q=${queryEsc(q)}&offset=${offset - resultsPerPage}">&laquo; Prev ${resultsPerPage}</a> &nbsp; ` : ''}
           ${rows.length > resultsPerPage ? `<a href="?q=${queryEsc(q)}&offset=${offset + resultsPerPage}">Next ${resultsPerPage} &raquo;</a>` : ''}
         </div>`;
+
+      ctx.waitUntil(pool.end());
 		}
     
     return new Response(html(q, results, performance.now() - t0), {

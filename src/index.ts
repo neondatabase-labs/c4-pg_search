@@ -78,7 +78,7 @@ const html = (q: string, results: string, t: number) => `<!DOCTYPE html>
       </h1>
       <form method="GET">
         <p><input type="text" size="50" name="q" value="${htmlEsc(q)}"> <input type="submit" value="Search"></p>
-        <p id="searching">Searching: this can take several minutes &hellip;</p>
+        <p id="searching">Please wait: this can take several minutes &hellip;</p>
       </form>
       ${results}
       <p class="description">

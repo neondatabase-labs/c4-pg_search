@@ -1,4 +1,9 @@
-import { Pool } from '@neondatabase/serverless';
+import { Pool } from 'pg';
+
+// We use pg (over TCP) instead of @neondatabase/serverless (over WebSockets)
+// because Cloudflare Workers disconnect WebSockets if there is no traffic for
+// 100s. We plan to start sending WebSocket Ping frames from the Neon proxy to
+// fix this, but the change is not yet implemented.
 
 export default {
 	async fetch(req, env, ctx): Promise<Response> {
@@ -17,7 +22,7 @@ export default {
         FROM pages
         WHERE body @@@ $1
         ORDER BY paradedb.score(id) DESC, id ASC
-        OFFSET $2 LIMIT $3`, 
+        OFFSET $2 LIMIT $3`,
         [searchTerms, offset, resultsPerPage + 1] // we request one extra result to know whether to display the 'Next' button
       ); 
 
